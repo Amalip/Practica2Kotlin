@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PracticaKotlin3</string>
+    <string name="text_username">Type your username</string>
+    <string name="text_password">Type your password</string>
+    <string name="text_login">Login</string>
+    <string name="text_login_social">Or get in with your social network</string>
+    <string name="text_login_credentials">Or get in with your credentials</string>
+
+
+</resources>
