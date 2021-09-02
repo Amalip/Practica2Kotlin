@@ -8,8 +8,9 @@ import kotlinx.parcelize.Parcelize
  */
 
 @Parcelize
-enum class LoginType : Parcelable {
+enum class LoginType(val text: Int) : Parcelable {
 
-    CREDENTIALS, SOCIAL
+    CREDENTIALS(R.string.text_login_credentials_label),
+    SOCIAL(R.string.text_login_social_label)
 
 }

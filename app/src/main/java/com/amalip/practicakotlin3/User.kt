@@ -1,16 +1,22 @@
 package com.amalip.practicakotlin3
 
+import android.os.Parcelable
+import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
+
 /**
  * Created by Amalip on 8/31/2021.
  */
 
+@JsonClass(generateAdapter = true)
+@Parcelize
 class User(
     var username: String = "",
     var password: String = "",
     var loginType: LoginType? = null,
     var socialNetwork: SocialNetwork? = null,
-    var level: UserLevel? = UserLevel.NORMAL_USER
-) {
+    var level: UserLevel = UserLevel.NORMAL_USER
+): Parcelable {
 
     companion object {
         val users = arrayOf(

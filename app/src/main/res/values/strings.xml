@@ -6,5 +6,19 @@
     <string name="text_login_social">Or get in with your social network</string>
     <string name="text_login_credentials">Or get in with your credentials</string>
 
+    <string name="empty_text"></string>
+    <string name="text_logout">Salir</string>
+
+    <string name="text_super_user">Usted es super usuario</string>
+    <string name="text_medium_user">Usted es usuario medio</string>
+    <string name="text_normal_user">Usted es usuario normal</string>
+
+    <string name="text_facebook">Facebook</string>
+    <string name="text_google">Google</string>
+    <string name="text_apple">Apple</string>
+    <string name="text_twitter">Twitter</string>
+
+    <string name="text_login_credentials_label">Ha ingresado mediante usuario y contraseña</string>
+    <string name="text_login_social_label">Ha ingresado mediante %1$s</string>
 
 </resources>

@@ -1,27 +1,53 @@
 package com.amalip.practicakotlin3
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import com.amalip.practicakotlin3.LoginType.*
+import com.amalip.practicakotlin3.LoginType.CREDENTIALS
+import com.amalip.practicakotlin3.LoginType.SOCIAL
+import com.squareup.moshi.Moshi
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        var doLogout = false
+    }
 
     private val LOGIN_TYPE = "LOGIN_KEY"
     private lateinit var loginType: LoginType
     private lateinit var user: User
+    private val PREFS = "MY_PREFERENCES"
+    private val USER_PREFS = "LOGGED_USER"
+    private lateinit var preferences: SharedPreferences
+    private val moshi = Moshi.Builder().build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        user = User()
+        preferences = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+
+        user = getLoggedInUser()
         loginType = savedInstanceState?.getParcelable(LOGIN_TYPE) ?: CREDENTIALS
 
         initViews()
+
+        if (user.username.isNotEmpty())
+            doLogin()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        if (doLogout)
+            saveLoggedUser()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -124,11 +150,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun doLogin() =
         user.validateUser()?.let {
+            saveLoggedUser(it)
+            startActivity(Intent(this, ProfileActivity::class.java).apply {
+                putExtra("loggedUser", it)
+            })
             showToast("Hello ${it.username}")
         } ?: showToast("User not found")
 
+    private fun saveLoggedUser(user: User? = null) {
+        preferences.edit().putString(USER_PREFS, moshi.adapter(User::class.java).toJson(user)).apply()
+    }
 
-    private fun showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun getLoggedInUser() =
+        preferences.getString(USER_PREFS, null)?.let {
+            return@let try {
+                moshi.adapter(User::class.java).fromJson(it)
+            } catch (e: Exception) {
+                User()
+            }
+        } ?: User()
+
+    private fun showToast(message: String) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     private fun initCredentials() {
         clCredentials.isVisible = true
